@@ -1,6 +1,9 @@
 "use server";
 import { env } from "process";
-import { getStockBySymbolResSchema } from "../lib/validation";
+import {
+  getFinancialScoreResSchema,
+  getStockBySymbolResSchema,
+} from "../lib/validation";
 
 export async function getStockBySymbol(symbol: string = "AAPL") {
   const res = await fetch(`
@@ -9,6 +12,21 @@ export async function getStockBySymbol(symbol: string = "AAPL") {
 
   //validate data with zod
   const parsedData = getStockBySymbolResSchema.safeParse(data);
+  if (!parsedData.success) {
+    console.error("Invalid data format", parsedData.error);
+    return;
+  }
+
+  return parsedData.data;
+}
+
+export async function getFinancialScore(symbol: string = "AAPL") {
+  const res = await fetch(
+    `https://financialmodelingprep.com/stable/financial-scores?symbol=${symbol}&apikey=${env.FMP_API_KEY}`
+  );
+  const data = await res.json();
+
+  const parsedData = getFinancialScoreResSchema.safeParse(data);
   if (!parsedData.success) {
     console.error("Invalid data format", parsedData.error);
     return;

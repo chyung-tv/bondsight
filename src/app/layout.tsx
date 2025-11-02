@@ -26,7 +26,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${interTight.variable} antialiased flex flex-col min-h-screen`}
       >
-        <NavigationBar className="max-h-12" />
+        <NavigationBar className="max-h-12 text-2xl font-semibold border-b w-full" />
         <div className="flex-1">{children}</div>
         <Footer className="border-t" />
       </body>
